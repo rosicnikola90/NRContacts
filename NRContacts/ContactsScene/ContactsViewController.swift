@@ -8,6 +8,7 @@
 import UIKit
 
 final class ContactsViewController: UIViewController {
+    
 
     //MARK: - properties
     private let viewModel = ContactsViewModel()
@@ -25,7 +26,7 @@ final class ContactsViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        
+        viewModel.getContacts()
     }
     
     //MARK: - metodes
@@ -33,6 +34,7 @@ final class ContactsViewController: UIViewController {
         view.backgroundColor = .tertiarySystemBackground
         contactsTableView.delegate = self
         contactsTableView.dataSource = viewModel
+        viewModel.delegate = self
         title = "Contacts"
         
         view.addSubview(contactsTableView)
@@ -60,6 +62,16 @@ extension ContactsViewController: UITableViewDelegate {
     }
 }
 
-
+    //MARK: -extension for ContactsViewModelDelegate
+extension ContactsViewController: ContactsViewModelDelegate {
+    
+    func contactsUpdatedWitSuccess() {
+        contactsTableView.reloadData()
+    }
+    
+    func contactsUpdatedWithError(error: String) {
+        
+    }
+}
 
 

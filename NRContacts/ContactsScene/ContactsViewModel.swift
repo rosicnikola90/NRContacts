@@ -7,15 +7,16 @@
 
 import UIKit
 
-//protocol ListViewModelDelegate: class {
-//    func symbolsUpdatedWitSuccess()
-//    func symbolsUpdatedWithError(error: String)
-//}
+protocol ContactsViewModelDelegate: class {
+    func contactsUpdatedWitSuccess()
+    func contactsUpdatedWithError(error: String)
+}
 
 final class ContactsViewModel: NSObject {
     
     //MARK: - properties
-    //private let contactList
+    weak var delegate: ContactsViewModelDelegate?
+    private var contactList: [Result] = []
     
     //MARK: - init
     override init() {
@@ -27,7 +28,22 @@ final class ContactsViewModel: NSObject {
     }
     
     //MARK: - metods
-
+    func getContacts() {
+        DataManager.sharedInstance.getContacts { [weak self] (contacts, error) in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.delegate?.contactsUpdatedWithError(error: error)
+                } else if let contacts = contacts {
+                    self.contactList = contacts
+                    self.delegate?.contactsUpdatedWitSuccess()
+                } else {
+                    self.delegate?.contactsUpdatedWithError(error: error ?? "something went wrong")
+                }
+            }
+        }
+    }
     
 }
 
