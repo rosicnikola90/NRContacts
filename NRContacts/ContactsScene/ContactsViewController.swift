@@ -16,6 +16,8 @@ final class ContactsViewController: UIViewController {
     private let contactsTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.bounces = false
+        tableView.isHidden = true
         tableView.register(ContactTableViewCell.self, forCellReuseIdentifier: ContactTableViewCell.identifier)
         return tableView
     }()
@@ -59,17 +61,25 @@ extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
 }
 
     //MARK: -extension for ContactsViewModelDelegate
 extension ContactsViewController: ContactsViewModelDelegate {
     
-    func contactsUpdatedWitSuccess() {
-        contactsTableView.reloadData()
+    func contactsUpdatedWitSuccess(forIndexPaths indexPats: [IndexPath]) {
+        contactsTableView.isHidden = false
+        contactsTableView.insertRows(at: indexPats, with: .automatic)
+        stopLoading()
     }
     
     func contactsUpdatedWithError(error: String) {
-        
+        stopLoading()
+        showAlert(title: "", message: error)
+    }
+    
+    func didStartUpdatingContacts() {
+        startLoading()
     }
 }
 

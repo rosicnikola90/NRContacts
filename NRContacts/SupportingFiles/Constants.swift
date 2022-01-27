@@ -9,5 +9,6 @@ import Foundation
 
 struct Constants {
     
-    static let urlForContactList = "https://randomuser.me/api/?page=1&results=20&seed=abc"
+    static let urlForContactListPrefix = "https://randomuser.me/api/?page="
+    static let urlForContactListSufix = "&results=20&seed=abc"
 }

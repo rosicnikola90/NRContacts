@@ -14,6 +14,7 @@ final class DataManager {
     public static let sharedInstance = DataManager()
     private var session: URLSession
     private var cachedDataForContactPictures = NSCache <NSString, NSData>()
+    private var nextPageForUpdate = 1
     
     //MARK: - init
     private init() {
@@ -28,7 +29,8 @@ final class DataManager {
     
     //MARK: - methods
     func getContacts(_ completion: @escaping([Contact]?, String?) -> ()) {
-        guard let url = URL(string: Constants.urlForContactList) else { completion(nil, "URL error"); return }
+        let urlString = Constants.urlForContactListPrefix + "\(nextPageForUpdate)" + Constants.urlForContactListSufix
+        guard let url = URL(string: urlString) else { completion(nil, "URL error"); return }
         
         print("getContacts URL: \(url)")
         let task = session.dataTask(with: url, completionHandler: {
@@ -44,6 +46,7 @@ final class DataManager {
                     do {
                         let welcome = try JSONDecoder().decode(DataForContacts.self, from: data)
                         if let contacts = welcome.results {
+                            self.nextPageForUpdate += 1
                             completion(contacts, nil)
                         }
                     } catch {

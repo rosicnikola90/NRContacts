@@ -14,7 +14,7 @@ final class ContactTableViewCell: UITableViewCell {
     private let placeholderImage = UIImage(systemName: "person")
     private let contactImageView = NRImageView(image: UIImage())
     private let locationImageView = NRImageView(image: UIImage(systemName: "location"))
-    private let contactSexImageView = NRImageView(image: UIImage())
+    private let contactGenderImageView = NRImageView(image: UIImage())
     private let emailImageView = NRImageView(image: UIImage(systemName: "envelope"))
     private let phoneCallImageView = NRImageView(image: UIImage(systemName: "phone"))
     
@@ -103,7 +103,7 @@ final class ContactTableViewCell: UITableViewCell {
     // MARK: - SetupViews
     private func setupCell() {
         contactImageView.image = placeholderImage
-        [contactImageView, contactSexImageView, locationImageView, contactNameLabel, contactTitleLabel, contactAgeLabel, contactAddressLabel, emailImageView, phoneCallImageView, contactCurrentTimeLabel].forEach { view in
+        [contactImageView, contactGenderImageView, locationImageView, contactNameLabel, contactTitleLabel, contactAgeLabel, contactAddressLabel, emailImageView, phoneCallImageView, contactCurrentTimeLabel].forEach { view in
             contentView.addSubview(view)
         }
         
@@ -112,6 +112,11 @@ final class ContactTableViewCell: UITableViewCell {
          contactImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
          contactImageView.widthAnchor.constraint(equalTo: contactImageView.heightAnchor)].forEach { constraint in
             constraint.isActive = true }
+        
+//        contactImageView.layer.shadowColor = UIColor.red.cgColor
+//        contactImageView.layer.shadowOpacity = 0.5
+//        contactImageView.layer.shadowOffset = .zero
+//        contactImageView.layer.shadowRadius = 10
     }
 }
 
