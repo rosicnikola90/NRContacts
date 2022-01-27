@@ -11,12 +11,14 @@ final class ContactTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = "contactTableViewCell"
-    
+    private let placeholderImage = UIImage(systemName: "person")
     private let contactImageView = NRImageView(image: UIImage())
     private let locationImageView = NRImageView(image: UIImage(systemName: "location"))
     private let contactSexImageView = NRImageView(image: UIImage())
     private let emailImageView = NRImageView(image: UIImage(systemName: "envelope"))
     private let phoneCallImageView = NRImageView(image: UIImage(systemName: "phone"))
+    
+    var id = ""
     
     private let contactNameLabel: NRLabel = {
         let label = NRLabel()
@@ -55,7 +57,7 @@ final class ContactTableViewCell: UITableViewCell {
         
         backgroundColor = .secondarySystemBackground
         //selectionStyle = .none
-        setupView()
+        setupCell()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -63,22 +65,53 @@ final class ContactTableViewCell: UITableViewCell {
     }
     
     // MARK: - Functions
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        id = ""
+        contactImageView.image = placeholderImage
+        
+    }
     
+    func configureCell(withContact contact: Contact) {
+        
+        if let title = contact.name?.title {
+            contactTitleLabel.text = title
+        }
+        
+        if let urlString = contact.picture?.medium {
+            self.id = urlString
+            DataManager.sharedInstance.getImageData(forUrl: urlString) { [weak self] (data, error, id) in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    if let data = data {
+                        if let contactImage = UIImage(data: data) {
+                            if let id = id {
+                                if id == self.id {
+                                    self.contactImageView.image = contactImage
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     
     // MARK: - SetupViews
-    private func setupView() {
-        
+    private func setupCell() {
+        contactImageView.image = placeholderImage
         [contactImageView, contactSexImageView, locationImageView, contactNameLabel, contactTitleLabel, contactAgeLabel, contactAddressLabel, emailImageView, phoneCallImageView, contactCurrentTimeLabel].forEach { view in
             contentView.addSubview(view)
         }
         
         [contactImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-         contactImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 8),
+         contactImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
          contactImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
          contactImageView.widthAnchor.constraint(equalTo: contactImageView.heightAnchor)].forEach { constraint in
             constraint.isActive = true }
-        
     }
 }
 

@@ -19,7 +19,6 @@
 		BC38EB7427A1F47D0072A510 /* NRNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB7327A1F47D0072A510 /* NRNavigationController.swift */; };
 		BC38EB7727A1F5D20072A510 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB7627A1F5D20072A510 /* DataManager.swift */; };
 		BC38EB7A27A1F8F30072A510 /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB7927A1F8F30072A510 /* ContactModel.swift */; };
-		BC38EB8027A1FA8E0072A510 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB7F27A1FA8E0072A510 /* LocationModel.swift */; };
 		BC38EB8427A2001F0072A510 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB8327A2001F0072A510 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,7 +37,6 @@
 		BC38EB7327A1F47D0072A510 /* NRNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRNavigationController.swift; sourceTree = "<group>"; };
 		BC38EB7627A1F5D20072A510 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		BC38EB7927A1F8F30072A510 /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
-		BC38EB7F27A1FA8E0072A510 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		BC38EB8327A2001F0072A510 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,7 +116,6 @@
 			isa = PBXGroup;
 			children = (
 				BC38EB7927A1F8F30072A510 /* ContactModel.swift */,
-				BC38EB7F27A1FA8E0072A510 /* LocationModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -195,7 +192,6 @@
 				BC38EB6127A1C2A70072A510 /* ContactTableVIewCell.swift in Sources */,
 				BC38EB4927A1564D0072A510 /* ContactsViewController.swift in Sources */,
 				BC38EB6C27A1E73E0072A510 /* NRImageView.swift in Sources */,
-				BC38EB8027A1FA8E0072A510 /* LocationModel.swift in Sources */,
 				BC38EB7427A1F47D0072A510 /* NRNavigationController.swift in Sources */,
 				BC38EB6F27A1F1770072A510 /* ContactsViewModel.swift in Sources */,
 				BC38EB6527A1DDBD0072A510 /* NRLabel.swift in Sources */,

@@ -14,11 +14,6 @@ final class NRImageView: UIImageView {
         commonInit()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
@@ -30,10 +25,9 @@ final class NRImageView: UIImageView {
         self.clipsToBounds = true
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        self.layer.cornerRadius = self.frame.size.height / 2
-//        self.clipsToBounds = true
-//    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = self.frame.size.height / 2
+    }
     
 }

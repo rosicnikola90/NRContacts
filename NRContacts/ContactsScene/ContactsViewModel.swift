@@ -16,7 +16,7 @@ final class ContactsViewModel: NSObject {
     
     //MARK: - properties
     weak var delegate: ContactsViewModelDelegate?
-    private var contactList: [Result] = []
+    private var contactList: [Contact] = []
     
     //MARK: - init
     override init() {
@@ -51,11 +51,12 @@ final class ContactsViewModel: NSObject {
 extension ContactsViewModel: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return contactList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.identifier, for: indexPath) as! ContactTableViewCell
+        cell.configureCell(withContact: contactList[indexPath.row])
         return cell
     }
     

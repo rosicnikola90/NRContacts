@@ -45,7 +45,6 @@ final class ContactsViewController: UIViewController {
             constraint.isActive = true
          }
         contactsTableView.backgroundColor = .clear
-        
     }
 
 }
@@ -54,7 +53,7 @@ final class ContactsViewController: UIViewController {
 extension ContactsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 140
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
