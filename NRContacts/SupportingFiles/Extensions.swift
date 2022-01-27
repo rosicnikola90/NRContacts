@@ -22,7 +22,7 @@ extension UIViewController {
         let activityIndicator = UIViewController.activityIndicator
         activityIndicator.center = self.view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor.systemBlue
+        activityIndicator.color = UIColor.systemRed
         activityIndicator.style = UIActivityIndicatorView.Style.large
 
         DispatchQueue.main.async {

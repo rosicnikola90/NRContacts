@@ -10,8 +10,6 @@ import UIKit
 
 final class NRStackView: UIStackView {
 
-    private let defaultSpacing: CGFloat = 8.0
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -27,7 +25,7 @@ final class NRStackView: UIStackView {
     private func customSettings() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.distribution = .fill
-        self.alignment = .leading
+        self.alignment = .center
         self.spacing = 5
         self.axis = .horizontal
     }

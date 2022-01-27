@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ContactTableViewCellDelegate: class {
+    
+}
+
 final class ContactTableViewCell: UITableViewCell {
     
     // MARK: - Properties
@@ -16,6 +20,7 @@ final class ContactTableViewCell: UITableViewCell {
     private let contactImageView = NRImageView(image: UIImage())
     private let locationImageButton = NRButton()
     private let contactGenderImageView = NRImageView(image: UIImage())
+    private let contactNationalityImageView = NRImageView(image: UIImage())
     private let emailButton = NRButton()
     private let phoneCallButton = NRButton()
     private let contactNameLabel = NRLabel()
@@ -26,12 +31,15 @@ final class ContactTableViewCell: UITableViewCell {
     private let contactCurrentTimeLabel = NRLabel()
     
     private var id = ""
+    private var natId = ""
+    private var contact: Contact?
+    weak var delegate: ContactTableViewCellDelegate?
     
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = .tertiarySystemBackground
         selectionStyle = .none
         setupCell()
     }
@@ -45,15 +53,32 @@ final class ContactTableViewCell: UITableViewCell {
         super.prepareForReuse()
         
         id = ""
+        natId = ""
         contactImageView.image = placeholderImage
         contactGenderImageView.image = nil
         contactTitleLabel.text = nil
         contactNameLabel.text = nil
         contactNameLabel.text = nil
-
+        contactAddressLabel.text = nil
+        contactCurrentTimeLabel.text = nil
+        contact = nil
+    }
+    
+    @objc private func locationButtonClicked() {
+        
+    }
+    
+    @objc private func phoneCallButtonClicked() {
+        
+    }
+    
+    @objc private func emailButtonClicked() {
+        
     }
     
     func configureCell(withContact contact: Contact) {
+        
+        self.contact = contact
         
         if let title = contact.name?.title {
             contactTitleLabel.text = title
@@ -65,6 +90,30 @@ final class ContactTableViewCell: UITableViewCell {
         
         if let lastName = contact.name?.last {
             contactLastNameLabel.text = lastName
+        }
+        
+        if let address = contact.location?.street?.name {
+            if let number = contact.location?.street?.number {
+                contactAddressLabel.text = address + ", " + "\(number)"
+                if let city = contact.location?.city {
+                    contactAddressLabel.text? += ", " + city
+                }
+                if let state = contact.location?.state {
+                    contactAddressLabel.text? += ", " + state
+                }
+            }
+        }
+        
+        if let userOffsetFromUTC = contact.location?.timezone?.offset {
+            let nowUTC = Date()
+            let filteredString = userOffsetFromUTC.replacingOccurrences(of: ":00", with: "")
+            if let timeZoneOffset = Int(filteredString) {
+                if let contactLocalDate = Calendar.current.date(byAdding: .hour, value: timeZoneOffset, to: nowUTC) {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd MMMM yyyy, HH:mm"
+                    contactCurrentTimeLabel.text = dateFormatter.string(from: contactLocalDate)
+                }
+            }
         }
         
         if let gender = contact.gender {
@@ -94,6 +143,26 @@ final class ContactTableViewCell: UITableViewCell {
                 }
             }
         }
+        
+        if let nationality = contact.nat {
+            let urlString = Constants.urlPrefixForFlags + nationality.lowercased()
+            natId = urlString
+            DataManager.sharedInstance.getImageData(forUrl: urlString) { [weak self] (data, error, id) in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    if let data = data {
+                        if let contactNatImage = UIImage(data: data) {
+                            if let id = id {
+                                if id == self.natId {
+                                    self.contactNationalityImageView.image = contactNatImage
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     
@@ -101,16 +170,17 @@ final class ContactTableViewCell: UITableViewCell {
     private func setupCell() {
         
         contactImageView.image = placeholderImage
-        locationImageButton.setImage(UIImage(named: "location"), for: .normal)
+        locationImageButton.setImage(UIImage(systemName: "location"), for: .normal)
         emailButton.setImage(UIImage(systemName: "envelope"), for: .normal)
         phoneCallButton.setImage(UIImage(systemName: "phone"), for: .normal)
-        locationImageButton.widthAnchor.constraint(equalTo: locationImageButton.heightAnchor).isActive = true
         
-        contactTitleLabel.backgroundColor = .gray
         contactTitleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contactNameLabel.backgroundColor = .cyan
         contactNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contactLastNameLabel.backgroundColor = .blue
+        locationImageButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        contactCurrentTimeLabel.textAlignment = .center
+        locationImageButton.tintColor = .systemOrange
+        emailButton.tintColor = .systemBlue
+        phoneCallButton.tintColor = .systemGreen
         
         [contactImageView].forEach { view in
             contentView.addSubview(view)
@@ -129,35 +199,37 @@ final class ContactTableViewCell: UITableViewCell {
          contactGenderImageView.bottomAnchor.constraint(equalTo: contactImageView.bottomAnchor, constant: -8),
          contactGenderImageView.trailingAnchor.constraint(equalTo: contactImageView.trailingAnchor, constant: -8)
         ].forEach { constraint in
-            constraint.isActive = true
-        }
+            constraint.isActive = true }
         
         let firstRowStackView = NRStackView(arrangedSubviews: [contactTitleLabel, contactNameLabel, contactLastNameLabel])
-        firstRowStackView.backgroundColor = .red
-        
         let secondRowStackView = NRStackView(arrangedSubviews: [locationImageButton, contactAddressLabel])
-        secondRowStackView.backgroundColor = .green
         let thirdRowStackView = NRStackView(arrangedSubviews: [contactCurrentTimeLabel])
-        thirdRowStackView.backgroundColor = .red
-
         let fourthRowStackView = NRStackView(arrangedSubviews: [emailButton, phoneCallButton])
-        fourthRowStackView.backgroundColor = .green
-
+        fourthRowStackView.distribution = .fillEqually
+        
         let mainSV = NRStackView(arrangedSubviews: [firstRowStackView, secondRowStackView, thirdRowStackView, fourthRowStackView])
         
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .fillEqually
-        mainSV.spacing = 8
+        mainSV.spacing = 0
         contentView.addSubview(mainSV)
         [mainSV.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
          mainSV.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
          mainSV.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
          mainSV.leadingAnchor.constraint(equalTo: contactImageView.trailingAnchor, constant: 12)].forEach { constraint in
-            constraint.isActive = true
-         }
+            constraint.isActive = true }
         
+        contentView.addSubview(contactNationalityImageView)
+        [contactNationalityImageView.widthAnchor.constraint(equalToConstant: 20),
+         contactNationalityImageView.heightAnchor.constraint(equalToConstant: 15),
+         contactNationalityImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
+         contactNationalityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2)].forEach { constraint in
+            constraint.isActive = true }
         
+        locationImageButton.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
+        phoneCallButton.addTarget(self, action: #selector(phoneCallButtonClicked), for: .touchUpInside)
+        emailButton.addTarget(self, action: #selector(emailButtonClicked), for: .touchUpInside)
     }
 }
 

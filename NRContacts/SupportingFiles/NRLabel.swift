@@ -23,5 +23,9 @@ final class NRLabel: UILabel {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textColor = .label
         self.textAlignment = .left
+        self.font = UIFont(name:"ArialRoundedMTBold", size: 14.0)
+        self.numberOfLines = 1
+        self.adjustsFontSizeToFitWidth = true
+        self.minimumScaleFactor = 0.5
     }
 }

@@ -10,6 +10,7 @@
 		BC26D86627A29CA70020602D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC26D86527A29CA70020602D /* Extensions.swift */; };
 		BC26D86927A2DC3B0020602D /* NRButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC26D86827A2DC3B0020602D /* NRButton.swift */; };
 		BC26D86D27A2E29A0020602D /* NRStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC26D86C27A2E29A0020602D /* NRStackView.swift */; };
+		BC26D87227A34FF50020602D /* locationPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC26D87127A34FF50020602D /* locationPopUpViewController.swift */; };
 		BC38EB4527A1564D0072A510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB4427A1564D0072A510 /* AppDelegate.swift */; };
 		BC38EB4727A1564D0072A510 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB4627A1564D0072A510 /* SceneDelegate.swift */; };
 		BC38EB4927A1564D0072A510 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC38EB4827A1564D0072A510 /* ContactsViewController.swift */; };
@@ -29,6 +30,7 @@
 		BC26D86527A29CA70020602D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BC26D86827A2DC3B0020602D /* NRButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRButton.swift; sourceTree = "<group>"; };
 		BC26D86C27A2E29A0020602D /* NRStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRStackView.swift; sourceTree = "<group>"; };
+		BC26D87127A34FF50020602D /* locationPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = locationPopUpViewController.swift; sourceTree = "<group>"; };
 		BC38EB4127A1564D0072A510 /* NRContacts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NRContacts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC38EB4427A1564D0072A510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC38EB4627A1564D0072A510 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC26D86F27A34F8D0020602D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				BC26D87027A34F990020602D /* PopUpScene */,
+				BC38EB5F27A1C26C0072A510 /* ContactsScene */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		BC26D87027A34F990020602D /* PopUpScene */ = {
+			isa = PBXGroup;
+			children = (
+				BC26D87127A34FF50020602D /* locationPopUpViewController.swift */,
+			);
+			path = PopUpScene;
+			sourceTree = "<group>";
+		};
 		BC38EB3827A1564D0072A510 = {
 			isa = PBXGroup;
 			children = (
@@ -76,8 +95,8 @@
 		BC38EB4327A1564D0072A510 /* NRContacts */ = {
 			isa = PBXGroup;
 			children = (
+				BC26D86F27A34F8D0020602D /* Scenes */,
 				BC38EB7127A1F2A50072A510 /* Models */,
-				BC38EB5F27A1C26C0072A510 /* ContactsScene */,
 				BC38EB5E27A1C06B0072A510 /* DataManager */,
 				BC38EB5D27A1C0570072A510 /* SupportingFiles */,
 				BC38EB4427A1564D0072A510 /* AppDelegate.swift */,
@@ -201,6 +220,7 @@
 				BC38EB6127A1C2A70072A510 /* ContactTableVIewCell.swift in Sources */,
 				BC38EB4927A1564D0072A510 /* ContactsViewController.swift in Sources */,
 				BC26D86927A2DC3B0020602D /* NRButton.swift in Sources */,
+				BC26D87227A34FF50020602D /* locationPopUpViewController.swift in Sources */,
 				BC38EB6C27A1E73E0072A510 /* NRImageView.swift in Sources */,
 				BC38EB7427A1F47D0072A510 /* NRNavigationController.swift in Sources */,
 				BC38EB6F27A1F1770072A510 /* ContactsViewModel.swift in Sources */,

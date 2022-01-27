@@ -7,32 +7,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CBD60A1-5039-45B0-BB4B-DC61FED9406D"
+            uuid = "2D910887-3FAB-4FC0-9AAB-81441CD5F350"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NRContacts/ContactsScene/ContactTableVIewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "configureCell(withContact:)"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "locationButtonClicked()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5BA75911-CD82-49B4-BFFA-278E1C73AE45"
+            uuid = "618C8BE2-23C4-4B05-AA1A-F9EC56314C7B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NRContacts/ContactsScene/ContactTableVIewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "configureCell(withContact:)"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "phoneCallButtonClicked()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DC24B0B1-923B-44BB-9A55-54D8C58292D3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NRContacts/ContactsScene/ContactTableVIewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "emailButtonClicked()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

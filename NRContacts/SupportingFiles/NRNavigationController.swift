@@ -13,6 +13,10 @@ final class NRNavigationController: UINavigationController {
         super.viewDidLoad()
 
         self.navigationBar.barTintColor = .systemBlue
+        self.navigationBar.layer.shadowColor = UIColor.systemBlue.cgColor
+        self.navigationBar.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
+        self.navigationBar.layer.shadowRadius = 4.0
+        self.navigationBar.layer.shadowOpacity = 1.0
     }
     
 
