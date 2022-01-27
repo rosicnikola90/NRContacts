@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E1854707-C32A-4DD7-81ED-4514228CB1A4"
-            shouldBeEnabled = "No"
+            uuid = "6CBD60A1-5039-45B0-BB4B-DC61FED9406D"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NRContacts/ContactsScene/ContactsViewController.swift"
+            filePath = "NRContacts/ContactsScene/ContactTableVIewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "didStartUpdatingContacts()"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "configureCell(withContact:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5BA75911-CD82-49B4-BFFA-278E1C73AE45"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NRContacts/ContactsScene/ContactTableVIewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "configureCell(withContact:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

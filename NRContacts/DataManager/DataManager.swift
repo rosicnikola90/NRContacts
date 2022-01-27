@@ -68,7 +68,7 @@ final class DataManager {
             completion(imageData as Data, nil, urlString)
             return
         }
-    
+        
         guard let url = URL(string: urlString) else { completion(nil, "URL error", nil); return }
         print("getImageData URL: \(url)")
         let task = session.downloadTask(with: url) {
@@ -97,4 +97,4 @@ final class DataManager {
         }
         task.resume()
     }
-    }
+}

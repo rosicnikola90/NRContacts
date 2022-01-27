@@ -33,9 +33,9 @@ extension UIViewController {
     
     func stopLoading() {
         let activityIndicator = UIViewController.activityIndicator
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             activityIndicator.stopAnimating()
             activityIndicator.removeFromSuperview()
         }
-    }
+    )}
 }

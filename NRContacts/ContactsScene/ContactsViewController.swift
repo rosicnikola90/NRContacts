@@ -69,7 +69,7 @@ extension ContactsViewController: ContactsViewModelDelegate {
     
     func contactsUpdatedWitSuccess(forIndexPaths indexPats: [IndexPath]) {
         contactsTableView.isHidden = false
-        contactsTableView.insertRows(at: indexPats, with: .automatic)
+        contactsTableView.insertRows(at: indexPats, with: .middle)
         stopLoading()
     }
     

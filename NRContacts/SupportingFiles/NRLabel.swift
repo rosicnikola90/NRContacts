@@ -22,5 +22,6 @@ final class NRLabel: UILabel {
     func commonInit() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textColor = .label
+        self.textAlignment = .left
     }
 }
