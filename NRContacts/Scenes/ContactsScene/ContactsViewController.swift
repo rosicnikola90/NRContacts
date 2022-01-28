@@ -11,7 +11,7 @@ final class ContactsViewController: UIViewController {
     
 
     //MARK: - properties
-    private let viewModel = ContactsViewModel()
+    private var viewModel = ContactsViewModel()
     
     private let contactsTableView: UITableView = {
         let tableView = UITableView()
@@ -22,16 +22,30 @@ final class ContactsViewController: UIViewController {
         return tableView
     }()
     
-    
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         viewModel.getContacts()
+        NotificationCenter.default.addObserver(self, selector: #selector(locationIsNeeded(notification:)), name: Notification.Name(Constants.locationNotificationName), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     //MARK: - metodes
+    @objc private func locationIsNeeded(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        guard let lat = userInfo["lat"] as? String else { return }
+        guard let lon = userInfo["lon"] as? String else { return }
+        guard let name = userInfo["name"] as? String else { return }
+        
+        let locationVC = LocationPopUpViewController(withLatitude: lat, andLongitude: lon, forContactName: name)
+        //let navigationVC = NRNavigationController(rootViewController: locationVC)
+        navigationController?.pushViewController(locationVC, animated: true)
+    }
+    
     private func setupView() {
         view.backgroundColor = .tertiarySystemBackground
         contactsTableView.delegate = self

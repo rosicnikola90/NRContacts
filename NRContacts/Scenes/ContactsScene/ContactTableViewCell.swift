@@ -1,5 +1,5 @@
 //
-//  ContactTableVIewCell.swift
+//  ContactTableViewCell.swift
 //  NRContacts
 //
 //  Created by Nikola Rosic on 26/01/2022.
@@ -9,6 +9,8 @@ import UIKit
 
 protocol ContactTableViewCellDelegate: class {
     
+    func locationHaveNoData()
+
 }
 
 final class ContactTableViewCell: UITableViewCell {
@@ -65,7 +67,16 @@ final class ContactTableViewCell: UITableViewCell {
     }
     
     @objc private func locationButtonClicked() {
-        
+        if let contact = contact {
+            guard let latitude = contact.location?.coordinates?.latitude else {
+                return
+            }
+            guard let longitude = contact.location?.coordinates?.longitude else {
+                return
+            }
+            
+            sentInfoToVCThatLocationNeedToBePresented(forLat: latitude, andLon: longitude, forName: (contact.name?.first ?? ""))
+        }
     }
     
     @objc private func phoneCallButtonClicked() {
@@ -76,22 +87,31 @@ final class ContactTableViewCell: UITableViewCell {
         
     }
     
+    private func sentInfoToVCThatLocationNeedToBePresented(forLat lat: String, andLon lon: String, forName name: String) {
+        let userInfo = [
+            "lat" : lat,
+            "lon" : lon,
+            "name": name
+            ]
+        NotificationCenter.default.post(name: Notification.Name(Constants.locationNotificationName), object: nil, userInfo: userInfo)
+    }
+    
     func configureCell(withContact contact: Contact) {
         
         self.contact = contact
-        
+        //set title
         if let title = contact.name?.title {
             contactTitleLabel.text = title
         }
-        
+        //set first name
         if let firstName = contact.name?.first {
             contactNameLabel.text = firstName
         }
-        
+        //set last name
         if let lastName = contact.name?.last {
             contactLastNameLabel.text = lastName
         }
-        
+        // set address
         if let address = contact.location?.street?.name {
             if let number = contact.location?.street?.number {
                 contactAddressLabel.text = address + ", " + "\(number)"
@@ -103,7 +123,7 @@ final class ContactTableViewCell: UITableViewCell {
                 }
             }
         }
-        
+        // set contact date
         if let userOffsetFromUTC = contact.location?.timezone?.offset {
             let nowUTC = Date()
             let filteredString = userOffsetFromUTC.replacingOccurrences(of: ":00", with: "")
@@ -115,7 +135,7 @@ final class ContactTableViewCell: UITableViewCell {
                 }
             }
         }
-        
+        //set contact gender
         if let gender = contact.gender {
             switch gender {
             case .male:
@@ -124,7 +144,7 @@ final class ContactTableViewCell: UITableViewCell {
                 contactGenderImageView.image = UIImage(named: "female")
             }
         }
-        
+        // set contact picture
         if let urlString = contact.picture?.large {
             self.id = urlString
             DataManager.sharedInstance.getImageData(forUrl: urlString) { [weak self] (data, error, id) in
@@ -143,7 +163,7 @@ final class ContactTableViewCell: UITableViewCell {
                 }
             }
         }
-        
+        // set nationality
         if let nationality = contact.nat {
             let urlString = Constants.urlPrefixForFlags + nationality.lowercased()
             natId = urlString

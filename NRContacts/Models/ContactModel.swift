@@ -11,15 +11,7 @@ import Foundation
 // MARK: - DataForContacts
 struct DataForContacts: Codable {
     let results: [Contact]?
-    //let info: Info?
 }
-
-//// MARK: - Info
-//struct Info: Codable {
-//    let seed: String
-//    let results, page: Int
-//    let version: String
-//}
 
 // MARK: - Result
 struct Contact: Codable {
