@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol ContactTableViewCellDelegate: class {
-    
-    func locationHaveNoData()
-
-}
+//protocol ContactTableViewCellDelegate: class {
+//
+//    func locationHaveNoData()
+//
+//}
 
 final class ContactTableViewCell: UITableViewCell {
     
@@ -26,16 +26,13 @@ final class ContactTableViewCell: UITableViewCell {
     private let emailButton = NRButton()
     private let phoneCallButton = NRButton()
     private let contactNameLabel = NRLabel()
-    private let contactLastNameLabel = NRLabel()
-    private let contactTitleLabel = NRLabel()
-    private let contactAgeLabel = NRLabel()
     private let contactAddressLabel = NRLabel()
     private let contactCurrentTimeLabel = NRLabel()
     
     private var id = ""
     private var natId = ""
     private var contact: Contact?
-    weak var delegate: ContactTableViewCellDelegate?
+    //weak var delegate: ContactTableViewCellDelegate?
     
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -58,8 +55,6 @@ final class ContactTableViewCell: UITableViewCell {
         natId = ""
         contactImageView.image = placeholderImage
         contactGenderImageView.image = nil
-        contactTitleLabel.text = nil
-        contactNameLabel.text = nil
         contactNameLabel.text = nil
         contactAddressLabel.text = nil
         contactCurrentTimeLabel.text = nil
@@ -99,17 +94,10 @@ final class ContactTableViewCell: UITableViewCell {
     func configureCell(withContact contact: Contact) {
         
         self.contact = contact
-        //set title
-        if let title = contact.name?.title {
-            contactTitleLabel.text = title
-        }
-        //set first name
-        if let firstName = contact.name?.first {
-            contactNameLabel.text = firstName
-        }
-        //set last name
-        if let lastName = contact.name?.last {
-            contactLastNameLabel.text = lastName
+        
+        // set name
+        if let name = contact.name?.first, let title = contact.name?.title, let lastName = contact.name?.last, let age = contact.dob?.age {
+            contactNameLabel.text = title + " " + name + " " + lastName + ", " + "\(age)"
         }
         // set address
         if let address = contact.location?.street?.name {
@@ -151,14 +139,8 @@ final class ContactTableViewCell: UITableViewCell {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
-                    if let data = data {
-                        if let contactImage = UIImage(data: data) {
-                            if let id = id {
-                                if id == self.id {
-                                    self.contactImageView.image = contactImage
-                                }
-                            }
-                        }
+                    if let data = data, let contactImage = UIImage(data: data), let id = id, id == self.id {
+                        self.contactImageView.image = contactImage
                     }
                 }
             }
@@ -171,22 +153,17 @@ final class ContactTableViewCell: UITableViewCell {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
-                    if let data = data {
-                        if let contactNatImage = UIImage(data: data) {
-                            if let id = id {
-                                if id == self.natId {
-                                    self.contactNationalityImageView.image = contactNatImage
-                                }
-                            }
-                        }
+                    if let data = data, let contactNatImage = UIImage(data: data), let id = id, id == self.natId {
+                        
+                        self.contactNationalityImageView.image = contactNatImage
                     }
                 }
             }
         }
     }
-    
-    
-    // MARK: - SetupViews
+        
+        
+        // MARK: - SetupViews
     private func setupCell() {
         
         contactImageView.image = placeholderImage
@@ -194,7 +171,6 @@ final class ContactTableViewCell: UITableViewCell {
         emailButton.setImage(UIImage(systemName: "envelope"), for: .normal)
         phoneCallButton.setImage(UIImage(systemName: "phone"), for: .normal)
         
-        contactTitleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         contactNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         locationImageButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         contactCurrentTimeLabel.textAlignment = .center
@@ -221,7 +197,7 @@ final class ContactTableViewCell: UITableViewCell {
         ].forEach { constraint in
             constraint.isActive = true }
         
-        let firstRowStackView = NRStackView(arrangedSubviews: [contactTitleLabel, contactNameLabel, contactLastNameLabel])
+        let firstRowStackView = NRStackView(arrangedSubviews: [contactNameLabel])
         let secondRowStackView = NRStackView(arrangedSubviews: [locationImageButton, contactAddressLabel])
         let thirdRowStackView = NRStackView(arrangedSubviews: [contactCurrentTimeLabel])
         let fourthRowStackView = NRStackView(arrangedSubviews: [emailButton, phoneCallButton])
@@ -244,12 +220,16 @@ final class ContactTableViewCell: UITableViewCell {
         [contactNationalityImageView.widthAnchor.constraint(equalToConstant: 20),
          contactNationalityImageView.heightAnchor.constraint(equalToConstant: 15),
          contactNationalityImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
-         contactNationalityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2)].forEach { constraint in
+         contactNationalityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)].forEach { constraint in
             constraint.isActive = true }
         
         locationImageButton.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
         phoneCallButton.addTarget(self, action: #selector(phoneCallButtonClicked), for: .touchUpInside)
         emailButton.addTarget(self, action: #selector(emailButtonClicked), for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(locationButtonClicked))
+        contactAddressLabel.addGestureRecognizer(tap)
+        contactAddressLabel.isUserInteractionEnabled = true
     }
-}
+    }
 

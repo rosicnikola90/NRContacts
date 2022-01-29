@@ -44,8 +44,6 @@ final class LocationPopUpViewController: UIViewController {
     private func setupMapView() {
         guard let lat = CLLocationDegrees(latitudeString) else { return }
         guard let lon = CLLocationDegrees(longitudeString) else { return }
-        print(lat)
-        print(lon)
         let location = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         let span = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
         let region = MKCoordinateRegion(center: location, span: span)
@@ -59,7 +57,7 @@ final class LocationPopUpViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .secondarySystemBackground
         //mapView.isUserInteractionEnabled = false
-        
+        title = "Location"
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
         mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true

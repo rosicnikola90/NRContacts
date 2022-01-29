@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 
 final class DataManager {
@@ -29,6 +30,26 @@ final class DataManager {
     
     //MARK: - methods
     func getContacts(_ completion: @escaping([Contact]?, String?) -> ()) {
+        
+        //check and load if there is page in locale
+        if let datas = loadPageDataFromLocal() {
+            print("PAGE FOR UPDATE : \(nextPageForUpdate), LOADED PAGES : \(datas.count)")
+            if nextPageForUpdate <= datas.count {
+                let pageData = datas[nextPageForUpdate - 1]
+                do {
+                    let welcome = try JSONDecoder().decode(DataForContacts.self, from: pageData)
+                    if let contacts = welcome.results {
+                        self.nextPageForUpdate += 1
+                        print("LOADED")
+                        completion(contacts, nil)
+                        return
+                    }
+                } catch {
+                    completion(nil, error.localizedDescription)
+                }
+            }
+        }
+        //get page form API and save data on locale
         let urlString = Constants.urlForContactListPrefix + "\(nextPageForUpdate)" + Constants.urlForContactListSufix
         guard let url = URL(string: urlString) else { completion(nil, "URL error"); return }
         
@@ -47,6 +68,10 @@ final class DataManager {
                         let welcome = try JSONDecoder().decode(DataForContacts.self, from: data)
                         if let contacts = welcome.results {
                             self.nextPageForUpdate += 1
+                            let isSaved = self.savePageDataToLocal(data: data)
+                            if isSaved {
+                                print("SAVED")
+                            }
                             completion(contacts, nil)
                         }
                     } catch {
@@ -97,4 +122,36 @@ final class DataManager {
         }
         task.resume()
     }
+    
+    private func savePageDataToLocal(data: Data) -> Bool {
+        do {
+            let realm = try Realm()
+            let contactsData = ContactsDataLocal()
+            contactsData.pageData = data
+            realm.beginWrite()
+            realm.add(contactsData)
+            do {
+                try realm.commitWrite()
+                return true
+            } catch {
+                return false
+            }
+        } catch {
+            return false
+        }
+    }
+    
+    private func loadPageDataFromLocal() -> [Data]? {
+        do {
+            var dataToReturn = [Data]()
+            let datas = try Realm().objects(ContactsDataLocal.self)
+            for data in datas {
+                dataToReturn.append(data.pageData)
+            }
+            return dataToReturn
+        } catch {
+            return nil
+        }
+    }
+    
 }

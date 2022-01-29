@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import RealmSwift
 
+
+class ContactsDataLocal: Object {
+    @objc dynamic var pageData = Data()
+}
 
 // MARK: - DataForContacts
 struct DataForContacts: Codable {

@@ -17,7 +17,7 @@ final class ContactsViewModel: NSObject {
     
     //MARK: - properties
     weak var delegate: ContactsViewModelDelegate?
-    private(set) var contactList: [Contact] = []
+    private var contactList: [Contact] = []
     private var startingIndexRow = 0
     private var indexPathsForUpdate: [IndexPath] = []
     

@@ -42,7 +42,6 @@ final class ContactsViewController: UIViewController {
         guard let name = userInfo["name"] as? String else { return }
         
         let locationVC = LocationPopUpViewController(withLatitude: lat, andLongitude: lon, forContactName: name)
-        //let navigationVC = NRNavigationController(rootViewController: locationVC)
         navigationController?.pushViewController(locationVC, animated: true)
     }
     
