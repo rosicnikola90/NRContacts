@@ -178,7 +178,6 @@ final class DataManager {
                 try realm.commitWrite()
                 print("IMAGE SAVED")
             } catch {
-                return nil
                 print("error saving image : \(url)")
                 return
             }
