@@ -23,6 +23,7 @@ extension UIViewController {
         activityIndicator.center = self.view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor.systemRed
+        activityIndicator.transform = CGAffineTransform(scaleX: 2, y: 2)
         activityIndicator.style = UIActivityIndicatorView.Style.large
 
         DispatchQueue.main.async {
@@ -33,7 +34,7 @@ extension UIViewController {
     
     func stopLoading() {
         let activityIndicator = UIViewController.activityIndicator
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
             activityIndicator.stopAnimating()
             activityIndicator.removeFromSuperview()
         }

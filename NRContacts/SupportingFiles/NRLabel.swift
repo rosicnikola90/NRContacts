@@ -26,6 +26,6 @@ final class NRLabel: UILabel {
         self.font = UIFont(name:"ArialRoundedMTBold", size: 14.0)
         self.numberOfLines = 1
         self.adjustsFontSizeToFitWidth = true
-        self.minimumScaleFactor = 0.5
+        self.minimumScaleFactor = 0.8
     }
 }

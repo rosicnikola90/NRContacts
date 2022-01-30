@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -78,7 +78,6 @@
 				C9AA549B5D055A0BE1AB581E /* Pods-NRContacts.debug.xcconfig */,
 				639FF6861740837857253B24 /* Pods-NRContacts.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

@@ -109,6 +109,9 @@ final class ContactTableViewCell: UITableViewCell {
                 if let state = contact.location?.state {
                     contactAddressLabel.text? += ", " + state
                 }
+                if let country = contact.location?.country {
+                    contactAddressLabel.text? += ", " + country
+                }
             }
         }
         // set contact date
@@ -128,8 +131,10 @@ final class ContactTableViewCell: UITableViewCell {
             switch gender {
             case .male:
                 contactGenderImageView.image = UIImage(named: "male")
+                contactGenderImageView.backgroundColor = .systemBlue
             case .female:
                 contactGenderImageView.image = UIImage(named: "female")
+                contactGenderImageView.backgroundColor = .systemPink
             }
         }
         // set contact picture
@@ -189,7 +194,6 @@ final class ContactTableViewCell: UITableViewCell {
             constraint.isActive = true }
         
         contactImageView.addSubview(contactGenderImageView)
-        contactGenderImageView.backgroundColor = .systemBlue
         [contactGenderImageView.widthAnchor.constraint(equalTo: contactImageView.widthAnchor, multiplier: 0.15),
          contactGenderImageView.heightAnchor.constraint(equalTo: contactGenderImageView.widthAnchor),
          contactGenderImageView.bottomAnchor.constraint(equalTo: contactImageView.bottomAnchor, constant: -8),
@@ -202,11 +206,12 @@ final class ContactTableViewCell: UITableViewCell {
         let thirdRowStackView = NRStackView(arrangedSubviews: [contactCurrentTimeLabel])
         let fourthRowStackView = NRStackView(arrangedSubviews: [emailButton, phoneCallButton])
         fourthRowStackView.distribution = .fillEqually
+        fourthRowStackView.spacing = 50
         
         let mainSV = NRStackView(arrangedSubviews: [firstRowStackView, secondRowStackView, thirdRowStackView, fourthRowStackView])
         
         mainSV.axis = .vertical
-        mainSV.alignment = .fill
+        mainSV.alignment = .leading
         mainSV.distribution = .fillEqually
         mainSV.spacing = 0
         contentView.addSubview(mainSV)

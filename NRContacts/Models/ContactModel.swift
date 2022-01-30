@@ -11,7 +11,15 @@ import RealmSwift
 
 class ContactsDataLocal: Object {
     @objc dynamic var pageData = Data()
-}
+    @objc dynamic var imageData = Data()
+    @objc dynamic var imageURL = ""
+ }
+
+ class ImageDataLocal: Object {
+     @objc dynamic var imageData = NSData()
+     @objc dynamic var imageURL: NSString = ""
+ }
+
 
 // MARK: - DataForContacts
 struct DataForContacts: Codable {

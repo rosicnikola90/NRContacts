@@ -16,12 +16,20 @@ final class DataManager {
     private var session: URLSession
     private var cachedDataForContactPictures = NSCache <NSString, NSData>()
     private var nextPageForUpdate = 1
+    private let realm: Realm?
+    private var imagesFromLocale: [String: Data]?
+    private var isFetchingDataInProgress = false
+    private var fetchedContactData: [Data]?
+
     
     //MARK: - init
     private init() {
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         self.session = session
+        self.realm = try? Realm()
+        self.fetchedContactData = loadPageDataFromLocal()
+        self.imagesFromLocale = loadImagesFromLocale()
     }
     
     deinit {
@@ -30,9 +38,12 @@ final class DataManager {
     
     //MARK: - methods
     func getContacts(_ completion: @escaping([Contact]?, String?) -> ()) {
-        
+        guard !isFetchingDataInProgress else { return }
+
+        isFetchingDataInProgress = true
+
         //check and load if there is page in locale
-        if let datas = loadPageDataFromLocal() {
+        if let datas = fetchedContactData {
             print("PAGE FOR UPDATE : \(nextPageForUpdate), LOADED PAGES : \(datas.count)")
             if nextPageForUpdate <= datas.count {
                 let pageData = datas[nextPageForUpdate - 1]
@@ -41,6 +52,7 @@ final class DataManager {
                     if let contacts = welcome.results {
                         self.nextPageForUpdate += 1
                         print("LOADED")
+                        isFetchingDataInProgress = false
                         completion(contacts, nil)
                         return
                     }
@@ -51,12 +63,13 @@ final class DataManager {
         }
         //get page form API and save data on locale
         let urlString = Constants.urlForContactListPrefix + "\(nextPageForUpdate)" + Constants.urlForContactListSufix
-        guard let url = URL(string: urlString) else { completion(nil, "URL error"); return }
+        guard let url = URL(string: urlString) else { completion(nil, "URL error"); isFetchingDataInProgress = false; return }
         
         print("getContacts URL: \(url)")
         let task = session.dataTask(with: url, completionHandler: {
             (data, response, error) in
             
+            self.isFetchingDataInProgress = false
             if let httpResponse = response as? HTTPURLResponse {
                 
                 if let error = error {
@@ -68,10 +81,7 @@ final class DataManager {
                         let welcome = try JSONDecoder().decode(DataForContacts.self, from: data)
                         if let contacts = welcome.results {
                             self.nextPageForUpdate += 1
-                            let isSaved = self.savePageDataToLocal(data: data)
-                            if isSaved {
-                                print("SAVED")
-                            }
+                            self.savePageDataToLocal(data: data)
                             completion(contacts, nil)
                         }
                     } catch {
@@ -88,6 +98,12 @@ final class DataManager {
     }
     
     func getImageData(forUrl urlString: String, _ completion: @escaping(Data?, String?, String?) -> ()) {
+        
+        if let imageFromLocale = imagesFromLocale?[urlString] {
+            completion(imageFromLocale, nil, urlString)
+            return
+        }
+        
         
         if let imageData = cachedDataForContactPictures.object(forKey: NSString(string: urlString)) {
             completion(imageData as Data, nil, urlString)
@@ -109,6 +125,7 @@ final class DataManager {
                     do {
                         let data = try Data(contentsOf: localURL)
                         self.cachedDataForContactPictures.setObject(data as NSData, forKey: NSString(string: urlString))
+                        self.saveImage(imageURL: urlString as NSString, andImageData: data as NSData)
                         completion(data, nil, urlString)
                     } catch let error {
                         completion(nil, error.localizedDescription, nil)
@@ -123,35 +140,60 @@ final class DataManager {
         task.resume()
     }
     
-    private func savePageDataToLocal(data: Data) -> Bool {
-        do {
-            let realm = try Realm()
+    private func savePageDataToLocal(data: Data) {
+        guard let realm = realm else { return }
+        DispatchQueue.main.async {
             let contactsData = ContactsDataLocal()
             contactsData.pageData = data
             realm.beginWrite()
             realm.add(contactsData)
             do {
                 try realm.commitWrite()
-                return true
+                return
             } catch {
-                return false
+                return
             }
-        } catch {
-            return false
         }
     }
     
     private func loadPageDataFromLocal() -> [Data]? {
-        do {
-            var dataToReturn = [Data]()
-            let datas = try Realm().objects(ContactsDataLocal.self)
-            for data in datas {
-                dataToReturn.append(data.pageData)
+        guard let realm = realm else { return nil }
+        var dataToReturn = [Data]()
+        let datas = realm.objects(ContactsDataLocal.self)
+        for data in datas {
+            dataToReturn.append(data.pageData)
+        }
+        return dataToReturn
+    }
+    
+    private func saveImage(imageURL url: NSString, andImageData data: NSData) {
+        guard let realm = realm else { return }
+        DispatchQueue.main.async {
+            let imageData = ImageDataLocal()
+            imageData.imageData = data
+            imageData.imageURL = url
+            realm.beginWrite()
+            realm.add(imageData)
+            do {
+                try realm.commitWrite()
+                print("IMAGE SAVED")
+            } catch {
+                return nil
+                print("error saving image : \(url)")
+                return
             }
-            return dataToReturn
-        } catch {
-            return nil
         }
     }
+       
+    private func loadImagesFromLocale() -> [String : Data]? {
+        guard let realm = realm else { return nil }
+        var dictionaryToReturn: [String : Data] = [:]
+        let images = realm.objects(ImageDataLocal.self)
+        for image in images {
+            dictionaryToReturn[image.imageURL as String] = image.imageData as Data
+        }
+        return dictionaryToReturn
+    }
+    
     
 }
